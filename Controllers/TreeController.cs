@@ -22,5 +22,11 @@ namespace RestDossierService.Controllers
         public IEnumerable<TreeItem> Get() {
             return _repo.GetAll();
         }
+
+        [HttpGetAttribute("{id}")]
+        public TreeItem Get(int id)
+        {
+            return _repo.Get(id);
+        }
     }
 }
