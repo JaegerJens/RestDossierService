@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RestDossierService.Data;
 
 namespace RestDossierService
 {
@@ -29,6 +30,9 @@ namespace RestDossierService
         {
             // Add framework services.
             services.AddMvc();
+
+            // Add own services
+            services.AddTransient<ITreeRepository, TreeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
