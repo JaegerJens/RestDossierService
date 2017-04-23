@@ -28,5 +28,15 @@ namespace RestDossierService.Controllers
         {
             return _repo.Get(id);
         }
+
+        [Route("{id}/children")]
+        public List<TreeItem> GetChildren(int id)
+        {
+            var parent = _repo.Get(id);
+            if (parent == null)
+                return null;
+            var children = _repo.GetChildren(parent);
+            return children;
+        }
     }
 }
