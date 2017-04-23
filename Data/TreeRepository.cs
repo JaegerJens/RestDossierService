@@ -5,13 +5,6 @@ using RestDossierService.Models;
 
 namespace RestDossierService.Data
 {
-    public interface ITreeRepository
-    {
-        List<TreeItem> GetAll();
-
-        TreeItem Get(int id);
-    }
-
     public class TreeRepository : ITreeRepository
     {
         public List<TreeItem> GetAll()
@@ -24,7 +17,14 @@ namespace RestDossierService.Data
             return Data.FirstOrDefault(d => d.Id == id);
         }
 
-        private static List<TreeItem> Data => new List<TreeItem>{
+        public List<TreeItem> GetChildren(TreeItem parent)
+        {
+            var relation = Relations.FirstOrDefault(r => r.Parent.Id == parent.Id);
+            return relation?.Children;
+        }
+
+        private static List<TreeItem> Data => new List<TreeItem>
+        {
             Root,
             Dossier,
             Sequence0,
@@ -32,45 +32,16 @@ namespace RestDossierService.Data
             Sequence2
         };
 
-        private static TreeItem Root = new TreeItem
-        {
-            Id = 1,
-            Name = "root",
-            Children = Children(Dossier)
-        };
+        private static TreeItem Root = new TreeItem(1, "root");
+        private static TreeItem Dossier = new TreeItem(2, "Extedorin");
+        private static TreeItem Sequence0 = new TreeItem(3, "0000");
+        private static TreeItem Sequence1 = new TreeItem(4, "0001");
+        private static TreeItem Sequence2 = new TreeItem(5, "00002");
 
-        private static TreeItem Dossier = new TreeItem
+        private static List<ParentChildrenRelation<TreeItem>> Relations = new List<ParentChildrenRelation<TreeItem>>
         {
-            Id = 2,
-            Name = "Extedorin",
-            Parent = Root,
-            Children = Children(Sequence0, Sequence1, Sequence2)
+            new ParentChildrenRelation<TreeItem>(Root, Dossier),
+            new ParentChildrenRelation<TreeItem>(Dossier, Sequence0, Sequence1, Sequence2)
         };
-
-        private static TreeItem Sequence0 = new TreeItem
-        {
-            Id = 3,
-            Name = "0000",
-            Parent = Dossier
-        };
-
-        private static TreeItem Sequence1 = new TreeItem
-        {
-            Id = 4,
-            Name = "0001",
-            Parent = Dossier
-        };
-
-        private static TreeItem Sequence2 = new TreeItem
-        {
-            Id = 5,
-            Name = "00002",
-            Parent = Dossier
-        };
-
-        private static List<T> Children<T>(params T[] children)
-        {
-            return new List<T>(children);
-        }
     }
 }
