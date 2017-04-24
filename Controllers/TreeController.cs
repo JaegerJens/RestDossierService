@@ -36,6 +36,10 @@ namespace RestDossierService.Controllers
             if (parent == null)
                 return null;
             var children = _repo.GetChildren(parent);
+            foreach(var child in children)
+            {
+                child.Parent = parent;
+            }
             return children;
         }
     }
